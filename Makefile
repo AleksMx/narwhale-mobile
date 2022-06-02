@@ -36,6 +36,7 @@ init:
 ## build_rust: Build the Rust part of the project.
 build_rust:
 	@$(MAKE) -C $(RUST_DIR) all
+	@cd $(RUST_PACKAGE_DIR); flutter pub run ffigen
 
 ## build: Build the Flutter application.
 build: build_rust
@@ -46,10 +47,14 @@ test_rust:
 	@echo "Running tests for the Rust code"
 	@cd $(RUST_DIR); cargo test
 
-## test: Run tests
-test: test_rust
+## test_rust_pkg: Test Rust package including Dart wrappers.
+test_rust_pkg:
 	@echo "Running tests for the Rust package"
+	@$(MAKE) -C $(RUST_DIR) test_lib
 	@cd $(RUST_PACKAGE_DIR); flutter test
+
+## test: Run all tests.
+test: test_rust test_rust_pkg
 	@echo "Running tests for the Flutter application"
 	@flutter test
 

@@ -11,6 +11,8 @@ ANDROID_ARMV7_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86
 ANDROID_I686_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/i686-linux-android29-clang
 ANDROID_X86_64_LINKER=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/$(OS_NAME)-x86_64/bin/x86_64-linux-android29-clang
 
+ANDROID_LIB_DIR=../android/src/main/jniLibs
+
 SHELL := /bin/bash
 
 # ##############################################################################
@@ -29,7 +31,7 @@ help: Makefile
 .PHONY: init
 init:
 	rustup target add aarch64-apple-ios x86_64-apple-ios
-	# rustup target add armv7-apple-ios armv7s-apple-ios i386-apple-ios ## Deprecated!
+# rustup target add armv7-apple-ios armv7s-apple-ios i386-apple-ios ## Deprecated!
 	rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 	@if [ $$(uname) == "Darwin" ] ; then cargo install cargo-lipo ; fi
 	cargo install cbindgen
@@ -62,32 +64,36 @@ target/aarch64-linux-android/release/$(LIBNAME).so: $(SOURCES) ndk-home
 	CC_aarch64_linux_android=$(ANDROID_AARCH64_LINKER) \
 	CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$(ANDROID_AARCH64_LINKER) \
 		cargo build --target aarch64-linux-android --release
-	rm -f ../android/src/main/jniLibs/arm64-v8a/$(LIBNAME).so
-	mv -f $@ ../android/src/main/jniLibs/arm64-v8a
+	rm -f $(ANDROID_LIB_DIR)/arm64-v8a/$(LIBNAME).so
+	mkdir -p $(ANDROID_LIB_DIR)/arm64-v8a
+	mv -f $@ $(ANDROID_LIB_DIR)/arm64-v8a
 	@echo "[DONE] $@"
 
 target/armv7-linux-androideabi/release/$(LIBNAME).so: $(SOURCES) ndk-home
 	CC_armv7_linux_androideabi=$(ANDROID_ARMV7_LINKER) \
 	CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER=$(ANDROID_ARMV7_LINKER) \
 		cargo build --target armv7-linux-androideabi --release
-	rm -f ../android/src/main/jniLibs/armeabi-v7a/$(LIBNAME).so
-	mv -f $@ ../android/src/main/jniLibs/armeabi-v7a
+	rm -f $(ANDROID_LIB_DIR)/armeabi-v7a/$(LIBNAME).so
+	mkdir -p $(ANDROID_LIB_DIR)/armeabi-v7a
+	mv -f $@ $(ANDROID_LIB_DIR)/armeabi-v7a
 	@echo "[DONE] $@"
 
 target/i686-linux-android/release/$(LIBNAME).so: $(SOURCES) ndk-home
 	CC_i686_linux_android=$(ANDROID_I686_LINKER) \
 	CARGO_TARGET_I686_LINUX_ANDROID_LINKER=$(ANDROID_I686_LINKER) \
 		cargo  build --target i686-linux-android --release
-	rm -f ../android/src/main/jniLibs/x86/$(LIBNAME).so
-	mv -f $@ ../android/src/main/jniLibs/x86
+	rm -f $(ANDROID_LIB_DIR)/x86/$(LIBNAME).so
+	mkdir -p $(ANDROID_LIB_DIR)/x86
+	mv -f $@ $(ANDROID_LIB_DIR)/x86
 	@echo "[DONE] $@"
 
 target/x86_64-linux-android/release/$(LIBNAME).so: $(SOURCES) ndk-home
 	CC_x86_64_linux_android=$(ANDROID_X86_64_LINKER) \
 	CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER=$(ANDROID_X86_64_LINKER) \
 		cargo build --target x86_64-linux-android --release
-	rm -f ../android/src/main/jniLibs/x86_64/$(LIBNAME).so
-	mv -f $@ ../android/src/main/jniLibs/x86_64
+	rm -f $(ANDROID_LIB_DIR)/x86_64/$(LIBNAME).so
+	mkdir -p $(ANDROID_LIB_DIR)/x86_64
+	mv -f $@ $(ANDROID_LIB_DIR)/x86_64
 	@echo "[DONE] $@"
 
 .PHONY: ndk-home
@@ -98,12 +104,17 @@ ndk-home:
 	fi
 
 ## bindings: Generate the .h file for iOS
-bindings: target/bindings.h
+bindings: target/bindings.h cbindgen.toml
 
-target/bindings.h: $(SOURCES)
-	cbindgen $^ -c cbindgen.toml | grep -v \#include | uniq > $@
+target/bindings.h: src/lib.rs cbindgen.toml
+	cd ..; flutter pub get
+	cbindgen $< -c cbindgen.toml | uniq > $@
 	cp -f $@ ../ios/Classes/$(LIBNAME)_bindings.h
 	@echo "[DONE] $@"
+
+# Generate debug version of the library for the host OS
+test_lib: $(SOURCES)
+	cargo build
 
 ## :
 
@@ -117,10 +128,10 @@ clean:
 	cargo clean
 	rm -f target/bindings.h target/bindings.src.h
 	rm -f ../ios/Classes/$(LIBNAME)_bindings.h
-	rm -f ../android/src/main/jniLibs/arm64-v8a/$(LIBNAME).so
-	rm -f ../android/src/main/jniLibs/armeabi-v7a/$(LIBNAME).so
-	rm -f ../android/src/main/jniLibs/x86/$(LIBNAME).so
-	rm -f ../android/src/main/jniLibs/x86_64/$(LIBNAME).so
+	rm -f $(ANDROID_LIB_DIR)/arm64-v8a/$(LIBNAME).so
+	rm -f $(ANDROID_LIB_DIR)/armeabi-v7a/$(LIBNAME).so
+	rm -f $(ANDROID_LIB_DIR)/x86/$(LIBNAME).so
+	rm -f $(ANDROID_LIB_DIR)/x86_64/$(LIBNAME).so
 	rm -f ../ios/$(LIBNAME).a
 
 ## test:
