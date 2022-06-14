@@ -17,29 +17,29 @@ class WalletItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            color: Utils.hexToColor('#202A40'),
-            borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: tapItem,
-              child: Container(
+    return InkWell(
+      onTap: tapItem,
+      child: Container(
+          decoration: BoxDecoration(
+              color: Utils.hexToColor('#202A40'),
+              borderRadius: BorderRadius.all(Radius.circular(5))
+          ),
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
                 padding: EdgeInsets.only(left: 15, right: 10),
                 child: getTopPanel(context)
               ),
-            ),
-            Container(
-              width: double.infinity,
-              child: getBottomPanel()
-            )
-          ],
-        )
+              Container(
+                width: double.infinity,
+                child: getBottomPanel()
+              )
+            ],
+          )
+      ),
     );
   }
 
@@ -60,7 +60,7 @@ class WalletItem extends StatelessWidget {
                 Text(walletModel.descriptor.policy, style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
                 Container(
                   margin: EdgeInsets.only(left: 10),
-                  child: Text('80h/1/0 (?)', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
+                  child: Text('', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
                 )
               ]
           )
@@ -86,24 +86,19 @@ class WalletItem extends StatelessWidget {
 
   Widget getBottomPanel() {
     List<Widget> rows = [];
-    int keyIndex = 0;
-    walletModel.descriptor.keys.forEach((SWalletKey walletKeyDetails) {
-      rows.add(Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Colors.grey[400]!)
-              )
-          ),
-          margin: EdgeInsets.only(top: 15),
-          child: AccountItem(
-            walletKey: walletModel.key,
-            walletKeyDetails: walletKeyDetails,
-            keyIndex: keyIndex
-          )
-      ));
-      keyIndex++;
-    });
+    rows.add(Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            /*border: Border(
+                top: BorderSide(color: Colors.grey[400]!)
+            )*/
+        ),
+        margin: EdgeInsets.only(top: 0),
+        child: AccountItem(
+          walletKey: walletModel.key,
+          keyIndex: 0
+        )
+    ));
 
     return Column(
         children: rows
@@ -111,8 +106,12 @@ class WalletItem extends StatelessWidget {
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_ACCOUNT, arguments: {
+    /*Get.toNamed(Routes.WALLET_ACCOUNT, arguments: {
       'walletKey': walletModel.key
+    });*/
+    Get.toNamed(Routes.WALLET_INFO, arguments: {
+      'walletKey': walletModel.key,
+      'keyIndex': 0
     });
   }
 }

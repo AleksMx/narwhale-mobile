@@ -208,8 +208,13 @@ class CCryptoProviderRust extends CCryptoProvider {
     );
   }
 
+  String _parseDescription(SMnemonicRootKey mnemonicRootKey, String desc, WalletNetwork net) {
+    var x = getParsedDescriptor(mnemonicRootKey, desc, net);
+    return '';
+  }
+
   @override
-  SCryptoTransactionModel parseTransaction(QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net) {
+  SCryptoTransactionModel parseTransaction(SMnemonicRootKey mnemonicRootKey, QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net) {
     List<dynamic> walletsJson = [];
     searchWallets.forEach((wallet) {
       walletsJson.add({
@@ -248,15 +253,18 @@ class CCryptoProviderRust extends CCryptoProvider {
 
   SCryptoTransactionPoint _parseTransactionPointItem(List<SWalletModel> searchWallets, var obj) {
     String address = obj['address'];
-    double value = obj['value'];
+    num value = obj['value'];
     List<dynamic> wallets = obj['wallets'];
 
+    if (wallets.isEmpty) {
+      throw 'Can not find wallet';
+    }
     num walletIndexNum = wallets.first;
     SWalletModel walletItem = searchWallets[walletIndexNum.toInt()];
 
     SCryptoTransactionPoint point = SCryptoTransactionPoint(
       address: address,
-      value: value,
+      value: value.toDouble(),
       walletKey: walletItem.key
     );
     return point;

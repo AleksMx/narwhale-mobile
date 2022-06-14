@@ -257,5 +257,5 @@ abstract class CCryptoProvider {
   SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net);
 
   //Transactions API
-  SCryptoTransactionModel parseTransaction(QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net);
+  SCryptoTransactionModel parseTransaction(SMnemonicRootKey mnemonicRootKey, QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net);
 }

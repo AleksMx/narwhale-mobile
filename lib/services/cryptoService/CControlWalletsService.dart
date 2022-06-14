@@ -12,7 +12,7 @@ class CControlWalletsService {
 
     SWalletDescriptor walletDescriptor;
     try {
-      walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptor(mnemonicRootKey, WalletNetwork.BITCOIN);
+      walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptor(mnemonicRootKey, CServices.crypto.getCurrentNetwork());
     } catch(e) {
       print(e);
       return false;
@@ -36,7 +36,7 @@ class CControlWalletsService {
 
     SWalletDescriptor walletDescriptor;
     try {
-      walletDescriptor = CServices.crypto.cryptoProvider.getParsedDescriptor(mnemonicRootKey, descriptor, WalletNetwork.BITCOIN);
+      walletDescriptor = CServices.crypto.cryptoProvider.getParsedDescriptor(mnemonicRootKey, descriptor, CServices.crypto.getCurrentNetwork());
     } catch(e) {
       print(e);
       return false;

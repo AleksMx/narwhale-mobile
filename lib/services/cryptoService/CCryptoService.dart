@@ -94,4 +94,8 @@ class CCryptoService {
 
     Get.offAllNamed(Routes.WALLETS);
   }
+
+  WalletNetwork getCurrentNetwork() {
+    return WalletNetwork.REGTEST;
+  }
 }

@@ -225,7 +225,7 @@ class QRCodeScannerState extends State<QRCodeScanner> {
           String label = obj['label'];
           int blockheight = obj['blockheight'] ?? 0;
           String descriptor = obj['descriptor'];
-          if (label.isEmpty || blockheight < 1 || descriptor.isEmpty) {
+          if (label.isEmpty || blockheight < 0 || descriptor.isEmpty) {
             return null;
           }
 
@@ -333,12 +333,19 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
-    if (!(CServices.crypto.controlTransactionsService.parseTransaction(qrCode))) {
+    try {
+      if (!(CServices.crypto.controlTransactionsService.parseTransaction(qrCode))) {
+        await CServices.notify.addMessage(
+            context, 'Oops!!', 'Please try again.',
+            actionTitle: 'Try Again'
+        );
+        return;
+      }
+    } catch(e) {
       await CServices.notify.addMessage(
-          context, 'Oops!!', 'Please try again.',
+          context, 'Oops!!', 'Error: ' + e.toString(),
           actionTitle: 'Try Again'
       );
-      return;
     }
   }
 }

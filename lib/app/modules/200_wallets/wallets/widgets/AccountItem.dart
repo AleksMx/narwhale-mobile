@@ -10,47 +10,42 @@ import '../../../../../utils.dart';
 
 class AccountItem extends StatelessWidget {
   final String walletKey;
-  final SWalletKey walletKeyDetails;
   final int keyIndex;
 
   AccountItem({
     required this.walletKey,
-    required this.walletKeyDetails,
     required this.keyIndex
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: tapItem,
-      child: Container(
-        padding: EdgeInsets.only(top: 15, bottom: 5),
-        child: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: getTopPanel(context),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: getOperationsList(context),
-                  )
-                ]
-              ),
+    return Container(
+      padding: EdgeInsets.only(top: 15, bottom: 5),
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /*Container(
+                  child: getTopPanel(context),
+                ),*/
+                Container(
+                  width: double.infinity,
+                  child: getOperationsList(context),
+                )
+              ]
             ),
-            Positioned(
-              top: 3,
-              right: 10,
-              child: Icon(CupertinoIcons.right_chevron, size: 20, color: Theme.of(context).accentColor)
-            )
-          ]
-        ),
-      )
+          )/*,
+          Positioned(
+            top: 3,
+            right: 10,
+            child: Icon(CupertinoIcons.right_chevron, size: 20, color: Theme.of(context).accentColor)
+          )*/
+        ]
+      ),
     );
   }
 
@@ -115,9 +110,9 @@ class AccountItem extends StatelessWidget {
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_INFO, arguments: {
+    /*Get.toNamed(Routes.WALLET_INFO, arguments: {
       'walletKey': walletKey,
       'keyIndex': keyIndex
-    });
+    });*/
   }
 }
