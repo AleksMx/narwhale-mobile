@@ -21,69 +21,19 @@ class AccountItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 5),
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /*Container(
-                  child: getTopPanel(context),
-                ),*/
-                Container(
-                  width: double.infinity,
-                  child: getOperationsList(context),
-                )
-              ]
-            ),
-          )/*,
-          Positioned(
-            top: 3,
-            right: 10,
-            child: Icon(CupertinoIcons.right_chevron, size: 20, color: Theme.of(context).accentColor)
-          )*/
-        ]
-      ),
-    );
-  }
-
-  Widget getTopPanel(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 10),
-          child: SvgPicture.asset('assets/icons/bitcoin.svg', color: Utils.hexToColor('#F3B352')),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Account #' + keyIndex.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(right: 20),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Exchange', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
-                    ]
-                  )
-                )
-              ]
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              child: getOperationsList(context),
             )
-          )
-        )
-      ]
+          ]
+        ),
+      ),
     );
   }
 
@@ -107,12 +57,5 @@ class AccountItem extends StatelessWidget {
     return Column(
       children: rows
     );
-  }
-
-  void tapItem() {
-    /*Get.toNamed(Routes.WALLET_INFO, arguments: {
-      'walletKey': walletKey,
-      'keyIndex': keyIndex
-    });*/
   }
 }

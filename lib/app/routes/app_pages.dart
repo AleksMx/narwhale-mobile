@@ -22,8 +22,6 @@ import '../modules/100_auth/10521_scan_qr_code/bindings/scan_qr_code_binding.dar
 import '../modules/100_auth/10521_scan_qr_code/views/scan_qr_code_view.dart';
 import '../modules/100_auth/105_add_wallet_select/bindings/add_wallet_binding.dart';
 import '../modules/100_auth/105_add_wallet_select/views/add_wallet_view.dart';
-import '../modules/200_wallets/walletAccount/bindings/wallet_account_binding.dart';
-import '../modules/200_wallets/walletAccount/views/wallet_account_view.dart';
 import '../modules/200_wallets/walletInfo/bindings/wallet_info_binding.dart';
 import '../modules/200_wallets/walletInfo/views/wallet_info_view.dart';
 import '../modules/200_wallets/walletInfoAddress/bindings/wallet_info_address_binding.dart';
@@ -110,11 +108,6 @@ class AppPages {
       name: _Paths.IMPORT_EXISTING_WALLET,
       page: () => ImportExistingWalletView(),
       binding: ImportExistingWalletBinding(),
-    ),
-    GetPage(
-      name: _Paths.WALLET_ACCOUNT,
-      page: () => WalletAccountView(),
-      binding: WalletAccountBinding(),
     ),
     GetPage(
       name: _Paths.SCAN_QR_CODE,
