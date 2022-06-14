@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import 'package:specter_mobile/services/cryptoService/CControlTransactionsService.dart';
 
 import '../LightButton.dart';
 import 'QRCodeScanner.dart';
@@ -93,8 +95,64 @@ class QRCodeView extends StatelessWidget {
         );
       case QRCodeScannerTypes.PARSE_TRANSACTION:
         QRCodeScannerResultParseTransaction qrCode = qrCodeScannerResult as QRCodeScannerResultParseTransaction;
-        return Text('Transaction: ' + qrCode.raw);
+        SCryptoTransactionModel transaction = qrCode.preprocessData as SCryptoTransactionModel;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Transaction', style: TextStyle(fontWeight: FontWeight.bold)),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: getTransactionArea(transaction)
+            )/*,
+            Container(
+              child: Text(transaction.toString())
+            )*/
+          ]
+        );
     }
+  }
+
+  Widget getTransactionArea(SCryptoTransactionModel transaction) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Fee: ' + transaction.fee.toString()),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Text('Inputs', style: TextStyle(fontWeight: FontWeight.bold))
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 3),
+          child: getTransactionPointsArea(transaction.inputs),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Text('Outputs', style: TextStyle(fontWeight: FontWeight.bold))
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 3),
+          child: getTransactionPointsArea(transaction.outputs),
+        )
+      ]
+    );
+  }
+
+  Widget getTransactionPointsArea(List<SCryptoTransactionPoint> points) {
+    List<Widget> rows = [];
+    points.forEach((point) {
+      SWalletModel walletItem = CServices.crypto.controlWalletsService.getWalletByKey(point.walletKey);
+
+      rows.add(Container(
+        child: Text(walletItem.name+ ' -> ' + point.value.toString())
+      ));
+    });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: rows
+    );
   }
 
   Widget getStatusLabel(String title, String info) {

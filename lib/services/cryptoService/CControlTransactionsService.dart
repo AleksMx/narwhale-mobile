@@ -47,10 +47,10 @@ class SCryptoTransactionModel {
     List<dynamic> outputsJson = [];
 
     inputs.forEach((el) {
-      inputsJson.add(el);
+      inputsJson.add(el.toJSON());
     });
-    outputsJson.forEach((el) {
-      outputsJson.add(el);
+    outputs.forEach((el) {
+      outputsJson.add(el.toJSON());
     });
 
     return {
@@ -71,10 +71,9 @@ class CControlTransactionsService {
 
   CControlTransactionsService(CCryptoProvider cryptoProvider): _cryptoProvider = cryptoProvider;
 
-  bool parseTransaction(QRCodeScannerResultParseTransaction transaction) {
+  SCryptoTransactionModel parseTransaction(QRCodeScannerResultParseTransaction transaction) {
     SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
     List<SWalletModel> wallets = CServices.crypto.privateCryptoContainer.getWallets();
-    CServices.crypto.cryptoProvider.parseTransaction(mnemonicRootKey, transaction, wallets, CServices.crypto.getCurrentNetwork());
-    return true;
+    return CServices.crypto.cryptoProvider.parseTransaction(mnemonicRootKey, transaction, wallets, CServices.crypto.getCurrentNetwork());
   }
 }

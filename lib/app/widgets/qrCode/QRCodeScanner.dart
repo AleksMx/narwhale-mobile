@@ -10,6 +10,7 @@ import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/o
 import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CCryptoExceptions.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import 'package:specter_mobile/services/cryptoService/CControlTransactionsService.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import 'QRCodeView.dart';
@@ -29,6 +30,7 @@ extension ParseToString on QRCodeScannerTypes {
 
 class QRCodeScannerResult {
   QRCodeScannerTypes qrCodeType = QRCodeScannerTypes.UNKNOWN;
+  dynamic preprocessData;
 }
 
 class QRCodeScannerResultAddWalletSimple extends QRCodeScannerResult {
@@ -168,6 +170,18 @@ class QRCodeScannerState extends State<QRCodeScanner> {
 
       //
       if (_qrCodeScannerStatus.result != null) {
+        try {
+          _qrCodeScannerStatus.result!.preprocessData = preprocessQRCode(_qrCodeScannerStatus.result!);
+        } catch(e) {
+          print(e);
+          await CServices.notify.addMessage(
+              context, 'Oops!!', 'QR code process error: ' + e.toString(),
+              actionTitle: 'Try Again'
+          );
+          return;
+        }
+
+        //
         await controller.pauseCamera();
         await onFound(context);
         if (!mounted) {
@@ -186,6 +200,21 @@ class QRCodeScannerState extends State<QRCodeScanner> {
     _qrCodeScannerStatus.isFind = false;
     _qrCodeScannerStatus.result = null;
     wasModified();
+  }
+
+  dynamic preprocessQRCode(QRCodeScannerResult qrCodeScannerResult) {
+    switch(qrCodeScannerResult.qrCodeType) {
+      case QRCodeScannerTypes.PARSE_TRANSACTION:
+        QRCodeScannerResultParseTransaction qrCode = qrCodeScannerResult as QRCodeScannerResultParseTransaction;
+        return CServices.crypto.controlTransactionsService.parseTransaction(qrCode);
+      case QRCodeScannerTypes.UNKNOWN:
+        break;
+      case QRCodeScannerTypes.ADD_WALLET_SIMPLE:
+        break;
+      case QRCodeScannerTypes.ADD_WALLET_JSON:
+        break;
+    }
+    return null;
   }
 
   QRCodeScannerResult? determineQRCodeType(String code) {
@@ -333,19 +362,7 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
-    try {
-      if (!(CServices.crypto.controlTransactionsService.parseTransaction(qrCode))) {
-        await CServices.notify.addMessage(
-            context, 'Oops!!', 'Please try again.',
-            actionTitle: 'Try Again'
-        );
-        return;
-      }
-    } catch(e) {
-      await CServices.notify.addMessage(
-          context, 'Oops!!', 'Error: ' + e.toString(),
-          actionTitle: 'Try Again'
-      );
-    }
+    var transaction = _qrCodeScannerStatus.result!.preprocessData as SCryptoTransactionModel;
+    print(transaction.toString());
   }
 }
