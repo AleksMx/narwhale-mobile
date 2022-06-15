@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import 'private/DiskBlobsContainer.dart';
@@ -17,6 +18,7 @@ class PrivateCryptoContainer {
   bool isVolumeOpen = false;
 
   static const int _mainContainerResourceID = 30;
+  static const int _transactionsStorageResourceID = 40;
 
   Future<void> init() async {
     await _diskContainer.init();
@@ -82,15 +84,21 @@ class PrivateCryptoContainer {
     }
   }
 
+  String getUsedPassword(String pass) {
+    return pass + '>' + CServices.crypto.sharedCryptoContainer.getCryptoSalt();
+  }
+
   bool createDefaultVolume() {
-    if (_diskContainer.findVolumeAndOpen(emptyPass)) {
+    String usePassword = getUsedPassword(emptyPass);
+    if (_diskContainer.findVolumeAndOpen(usePassword)) {
       return false;
     }
-    return _diskContainer.createVolume(0, emptyPass);
+    return _diskContainer.createVolume(0, usePassword);
   }
 
   bool tryOpenPrivateCryptoContainer(String pass) {
-    if (!_diskContainer.findVolumeAndOpen(pass.isEmpty?emptyPass:pass)) {
+    String usePassword = getUsedPassword(pass.isEmpty?emptyPass:pass);
+    if (!_diskContainer.findVolumeAndOpen(usePassword)) {
       return false;
     }
 
@@ -191,5 +199,10 @@ class PrivateCryptoContainer {
     }
 
     return _privateCryptoContainerModel!.getWallets();
+  }
+
+  DiskStorageJSON getTransactionsStorage() {
+    DiskStorageJSON storageJSON = DiskStorageJSON(diskBlobsContainer: _diskBlobsContainer!, resourceID: _transactionsStorageResourceID);
+    return storageJSON;
   }
 }

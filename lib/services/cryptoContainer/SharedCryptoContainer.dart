@@ -286,4 +286,8 @@ class SharedCryptoContainer {
   bool isAppInit() {
     return sharedCryptoContainerModel!.isAppInit();
   }
+
+  String getCryptoSalt() {
+    return sharedCryptoContainerModel!.getCryptoSalt();
+  }
 }

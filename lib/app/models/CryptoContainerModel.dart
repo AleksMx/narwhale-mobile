@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:specter_mobile/services/CCryptoExceptions.dart';
 import 'package:specter_mobile/services/cryptoContainer/SharedCryptoContainer.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
+import 'package:specter_mobile/utils.dart';
 
 class SWalletModel {
   String key;
@@ -36,7 +37,7 @@ class SWalletModel {
 class SharedCryptoContainerModel {
   final version = 1;
   final List<CryptoContainerType> _authTypes;
-  String? _pinCodeSign;
+  String? _pinCodeSign, _salt;
   bool _appInit = false;
 
   SharedCryptoContainerModel({
@@ -46,6 +47,7 @@ class SharedCryptoContainerModel {
   bool loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
     _appInit = data['appInit'];
+    _salt = data['salt'];
     return true;
   }
 
@@ -55,7 +57,8 @@ class SharedCryptoContainerModel {
       'version': 1,
       'appInit': _appInit,
       'authTypes': getAuthTypes(),
-      'pinCodeSign': _pinCodeSign
+      'pinCodeSign': _pinCodeSign,
+      'salt': _salt
     });
   }
 
@@ -68,6 +71,9 @@ class SharedCryptoContainerModel {
   }
 
   void addAuthType(CryptoContainerType authType) {
+    _salt ??= Utils.getRandomString(50);
+
+    //
     if (_authTypes.contains(authType)) {
       return;
     }
@@ -92,6 +98,10 @@ class SharedCryptoContainerModel {
 
   void setAppInit() {
     _appInit = true;
+  }
+
+  String getCryptoSalt() {
+    return _salt!;
   }
 }
 

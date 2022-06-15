@@ -91,4 +91,15 @@ class Utils {
   static isWeb() {
     return (getPlatformType() == PlatformType.web);
   }
+
+  static String getRandomString(int len) {
+    String text = '';
+    const String possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (int i = 0; i < len; i++) {
+      int idx = (Random.secure().nextDouble() * possible.length).floor();
+      text += possible [idx];
+    }
+    return text;
+  }
 }

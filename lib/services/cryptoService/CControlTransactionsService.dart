@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
+import 'package:specter_mobile/services/cryptoContainer/private/storages/DiskStorageJSON.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
+import 'package:specter_mobile/utils.dart';
 
 import '../CServices.dart';
 
@@ -35,12 +38,34 @@ class SCryptoTransactionModel {
   final double fee;
   final List<SCryptoTransactionPoint> inputs;
   final List<SCryptoTransactionPoint> outputs;
+
+  late int addTime;
+  late String key;
   
   SCryptoTransactionModel({
     required this.fee,
     required this.inputs,
     required this.outputs
-  });
+  }) {
+    addTime = Utils.getTimeMs();
+    key = getTxKey();
+  }
+
+  String getTxKey() {
+    String str = '';
+    str += 'inputs:';
+    inputs.forEach((el) {
+      str += el.address + '>' + el.value.toString() + ';';
+    });
+    str += 'outputs:';
+    outputs.forEach((el) {
+      str += el.address + '>' + el.value.toString() + ';';
+    });
+    str += 'fee:' + fee.toString() + ';';
+
+    //
+    return sha256.convert(utf8.encode(str)).toString().toUpperCase();
+  }
 
   Map<String, dynamic> toJSON() {
     List<dynamic> inputsJson = [];
@@ -54,6 +79,8 @@ class SCryptoTransactionModel {
     });
 
     return {
+      'key': key,
+      'addTime': addTime,
       'fee': fee,
       'inputs': inputsJson,
       'output': outputsJson
@@ -75,5 +102,26 @@ class CControlTransactionsService {
     SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
     List<SWalletModel> wallets = CServices.crypto.privateCryptoContainer.getWallets();
     return CServices.crypto.cryptoProvider.parseTransaction(mnemonicRootKey, transaction, wallets, CServices.crypto.getCurrentNetwork());
+  }
+
+  void saveTransaction(SCryptoTransactionModel transaction) {
+    DiskStorageJSON storageJSON = CServices.crypto.privateCryptoContainer.getTransactionsStorage();
+    var obj = storageJSON.readData();
+    obj ??= {
+        'transactions': []
+      };
+
+    List<dynamic> transactions = obj['transactions'];
+    transactions.forEach((tx) {
+      if (tx['key'] == transaction.key) {
+        throw 'Already exists';
+      }
+    });
+
+    transactions.add(transaction.toJSON());
+
+    print(obj.toString());
+
+    storageJSON.saveData(obj);
   }
 }

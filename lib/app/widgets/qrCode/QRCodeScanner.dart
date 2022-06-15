@@ -364,5 +364,18 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
     var transaction = _qrCodeScannerStatus.result!.preprocessData as SCryptoTransactionModel;
     print(transaction.toString());
+
+    try {
+      CServices.crypto.controlTransactionsService.saveTransaction(transaction);
+    } catch (e) {
+      await CServices.notify.addMessage(
+          context, 'Oops!!', 'Error: ' + e.toString(),
+          actionTitle: 'Try Again'
+      );
+      return;
+    }
+
+    CServices.notify.closeDialog();
+    CServices.crypto.openAfterAuthPage();
   }
 }
