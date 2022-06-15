@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/200_wallets/walletInfo/views/wallet_info_view.dart';
-import 'package:specter_mobile/app/routes/app_pages.dart';
-import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
+import 'package:intl/intl.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import '../../../../../utils.dart';
 
@@ -39,7 +36,22 @@ class AccountItem extends StatelessWidget {
 
   Widget getOperationsList(BuildContext context) {
     List<Widget> rows = [];
-    for (int i = 0; i < 3; i++) {
+    List<SCryptoTransactionModel> txs = CServices.crypto.controlTransactionsService.getWalletTransactions(walletKey);
+
+    Color textColor = Theme.of(context).accentColor;
+
+    txs.forEach((tx) {
+      String info = '';
+      tx.outputs.forEach((point) {
+        if (info.isNotEmpty) {
+          info += '\n';
+        }
+        info += 'send ' + Utils.formatBTC(point.value);
+      });
+
+      var dt = DateTime.fromMicrosecondsSinceEpoch(tx.addTime * 1000);
+      String date = DateFormat('yyyy-MM-dd kk:mm').format(dt);
+
       rows.add(Container(
         width: double.infinity,
         margin: EdgeInsets.only(top: rows.isEmpty?5:1),
@@ -48,12 +60,20 @@ class AccountItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Dec, 12, 2020', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
-            Text('send 0.01, change 0.100', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+            Container(
+              child: Text(date, style: TextStyle(fontSize: 14, color: textColor))
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text(info, textAlign: TextAlign.right, softWrap: true, style: TextStyle(fontSize: 14, color: textColor))
+              )
+            )
           ]
         )
       ));
-    }
+    });
+
     return Column(
       children: rows
     );

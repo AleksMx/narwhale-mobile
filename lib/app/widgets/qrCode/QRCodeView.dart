@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/CControlTransactionsService.dart';
 

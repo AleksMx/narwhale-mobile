@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 import 'package:specter_rust/specter_rust.dart';
 

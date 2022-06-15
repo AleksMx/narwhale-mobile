@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 
 import '../../CEntropyExternalGenerationService.dart';

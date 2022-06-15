@@ -85,6 +85,9 @@ class CCryptoService {
     }
 
     //
+    controlTransactionsService.loadData();
+
+    //
     if (!privateCryptoContainer.isWalletsInit()) {
       Get.offAllNamed(Routes.ADD_WALLET_SELECT, arguments: {
         'displayExternalActions': false

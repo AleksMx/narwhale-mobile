@@ -52,9 +52,9 @@ class Utils {
   }
 
   static PlatformType? _platformType;
-  static getPlatformType () {
+  static PlatformType getPlatformType() {
     if (_platformType != null) {
-      return _platformType;
+      return _platformType!;
     }
     try {
       if (Platform.isIOS) {
@@ -101,5 +101,10 @@ class Utils {
       text += possible [idx];
     }
     return text;
+  }
+
+  static String formatBTC(double val) {
+    double x = val / 100000000;
+    return x.toString() + '\u{00A0}BTC';
   }
 }
