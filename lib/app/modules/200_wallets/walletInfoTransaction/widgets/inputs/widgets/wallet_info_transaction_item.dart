@@ -2,10 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import '../../../../../../../utils.dart';
 
 class WalletInfoTransactionItem extends StatelessWidget {
+  final SCryptoTransactionPoint transactionPoint;
+  WalletInfoTransactionItem({required this.transactionPoint});
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -51,20 +57,29 @@ class WalletInfoTransactionItem extends StatelessWidget {
   }
 
   Widget getTopPanel() {
+    SWalletModel? walletItem;
+    try {
+      walletItem = CServices.crypto.controlWalletsService.getWalletByKey(transactionPoint.walletKey);
+    } catch(e) {;;};
+
+    String title = '';
+    if (walletItem == null) {
+      title = 'Wallet not found';
+    } else {
+      title = walletItem.name;
+    }
+
     TextStyle style = TextStyle(color: Colors.white);
     return Row(
         children: [
-          Container(
-              child: Text('#0', style: style)
-          ),
           Expanded(
             child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: Text('title', style: style)
+                margin: EdgeInsets.only(right: 10),
+                child: Text(title, style: style)
             ),
           ),
           Container(
-              child: Text('0 BTC', style: style)
+              child: Text(Utils.formatBTC(transactionPoint.value), style: style)
           )
         ]
     );
@@ -73,7 +88,7 @@ class WalletInfoTransactionItem extends StatelessWidget {
   Widget getBottomPanel() {
     TextStyle style = TextStyle(color: Colors.white.withOpacity(0.5));
     return Container(
-        child: Text('TXID: ...', style: style)
+        child: Text(transactionPoint.address, style: style)
     );
   }
 

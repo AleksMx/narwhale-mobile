@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/widgets/details/widgets/WalletInfoAddressDetailsList.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import '../controllers/wallet_info_transaction_info_controller.dart';
 
 class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoController> {
-  final WalletInfoTransactionInfoController controller = Get.put(WalletInfoTransactionInfoController());
+  final WalletInfoTransactionInfoController _controller;
+
+  WalletInfoTransactionInfoView({
+    required WalletInfoTransactionInfoController controller
+  }): _controller = controller;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +67,7 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
   Widget getAddressPanel(BuildContext context) {
     return Column(
       children: [
-        Text(controller.transactionID),
+        Text(_controller.transactionID),
         Container(
           margin: EdgeInsets.only(top: 20),
           child: getCopyAddress(context)
@@ -88,12 +93,12 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
 
   Widget getDetailsPanel() {
     return WalletInfoAddressDetailsList(
-        list: controller.list
+        list: _controller.list
     );
   }
 
   void copyAddress(BuildContext context) {
-    Clipboard.setData(ClipboardData(text: controller.transactionID));
+    Clipboard.setData(ClipboardData(text: _controller.transactionID));
     CServices.notify.addNotify(context, 'Transaction ID copied');
   }
 }

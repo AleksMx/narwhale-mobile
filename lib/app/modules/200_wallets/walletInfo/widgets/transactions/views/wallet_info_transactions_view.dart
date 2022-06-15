@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
 import 'package:specter_mobile/app/widgets/DateSelector.dart';
 import 'package:specter_mobile/app/widgets/LightFilter.dart';
 import 'package:specter_mobile/services/CServices.dart';
@@ -12,8 +14,11 @@ import '../widgets/wallet_info_transactions_item.dart';
 
 class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsController> {
   final WalletInfoTransactionsController _controller;
+  final SWalletModel _walletItem;
 
-  WalletInfoTransactionsView({required WalletInfoTransactionsController controller}): _controller = controller;
+  WalletInfoTransactionsView({
+    required WalletInfoTransactionsController controller, required SWalletModel walletItem
+  }): _controller = controller, _walletItem = walletItem;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,7 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
           Expanded(
             child: Container(
               padding: EdgeInsets.only(top: 10),
-              child: getTabContent()
+              child: Obx(()=>getTabContent())
             )
           )
         ]
@@ -100,24 +105,25 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
   }
 
   Widget getTabContent() {
-    /*switch(controller.currentTab.value) {
+    switch(_controller.currentTab.value) {
       case WALLET_INFO_TRANSACTIONS_TAB.HISTORY: {
-        return Text('HISTORY');
+        List<SCryptoTransactionModel> txs = CServices.crypto.controlTransactionsService.getWalletTransactions(_walletItem.key);
+        return ListView.builder(
+          itemCount: txs.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.only(top: (index == 0)?10:10, left: 15, right: 15),
+              child: WalletInfoTransactionsItem(transaction: txs[index], walletKey: _walletItem.key)
+            );
+          }
+        );
       }
       case WALLET_INFO_TRANSACTIONS_TAB.UTXO: {
-        return Text('UTXO');
+        return Center(
+          child: Text('Will be soon')
+        );
       }
-    }*/
-
-    return ListView.builder(
-        itemCount: _controller.items.length,
-        itemBuilder: (context, index) {
-          return Container(
-              margin: EdgeInsets.only(top: (index == 0)?10:10, left: 15, right: 15),
-              child: WalletInfoTransactionsItem()
-          );
-        }
-    );
+    }
   }
 
   Future<String> selectFilterDate(BuildContext context) async {

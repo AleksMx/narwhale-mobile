@@ -34,20 +34,20 @@ class AccountItem extends StatelessWidget {
 
   Widget getOperationsList(BuildContext context) {
     List<Widget> rows = [];
-    List<SCryptoTransactionModel> txs = CServices.crypto.controlTransactionsService.getWalletTransactions(walletKey);
+    List<SCryptoTransactionModel> transactions = CServices.crypto.controlTransactionsService.getWalletTransactions(walletKey);
 
     Color textColor = Theme.of(context).accentColor;
 
-    txs.forEach((tx) {
+    transactions.forEach((transaction) {
       String info = '';
-      tx.outputs.forEach((point) {
+      transaction.outputs.forEach((point) {
         if (info.isNotEmpty) {
           info += '\n';
         }
         info += 'send ' + Utils.formatBTC(point.value);
       });
 
-      var dt = DateTime.fromMicrosecondsSinceEpoch(tx.addTime * 1000);
+      var dt = DateTime.fromMicrosecondsSinceEpoch(transaction.addTime * 1000);
       String date = DateFormat('yyyy-MM-dd kk:mm').format(dt);
 
       rows.add(Container(

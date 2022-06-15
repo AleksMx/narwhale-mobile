@@ -126,6 +126,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
       }
       case WALLET_INFO_TAB.TRANSACTIONS: {
         return WalletInfoTransactionsView(
+          walletItem: controller.walletItem!,
           controller: _walletInfoTransactionsController
         );
       }

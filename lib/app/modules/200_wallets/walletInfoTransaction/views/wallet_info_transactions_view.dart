@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfoTransaction/widgets/info/controllers/wallet_info_transaction_info_controller.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 import 'package:specter_mobile/app/widgets/TopSide.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
@@ -71,40 +72,40 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
 
   Widget getContent() {
     return Obx(() => Container(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: LightTab(
-                    tabs: [
-                      LightTabNode('Information', key: WALLET_INFO_TRANSACTIONS_TAB.INFO.toString()),
-                      LightTabNode('Inputs', key: WALLET_INFO_TRANSACTIONS_TAB.INPUTS.toString()),
-                      LightTabNode('Outputs', key: WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS.toString())
-                    ],
-                    tabKey: controller.currentTab.toString(),
-                    onSelect: (String key) {
-                      controller.setCurrentTab(key);
-                    }
-                ),
-              ),
-              Expanded(
-                  child: getTabContent()
-              )
-            ]
-        )
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: LightTab(
+              tabs: [
+                LightTabNode('Information', key: WALLET_INFO_TRANSACTIONS_TAB.INFO.toString()),
+                LightTabNode('Inputs', key: WALLET_INFO_TRANSACTIONS_TAB.INPUTS.toString()),
+                LightTabNode('Outputs', key: WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS.toString())
+              ],
+              tabKey: controller.currentTab.toString(),
+              onSelect: (String key) {
+                controller.setCurrentTab(key);
+              }
+            ),
+          ),
+          Expanded(
+            child: getTabContent()
+          )
+        ]
+      )
     ));
   }
 
   Widget getTabContent() {
     switch(controller.currentTab.value) {
       case WALLET_INFO_TRANSACTIONS_TAB.INFO:
-        return WalletInfoTransactionInfoView();
+        return WalletInfoTransactionInfoView(controller: controller.walletInfoTransactionInfoController!);
       case WALLET_INFO_TRANSACTIONS_TAB.INPUTS:
-        return WalletInfoTransactionInputsView();
+        return WalletInfoTransactionInputsView(controller: controller.walletInfoTransactionInputsController!);
       case WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS:
-        return WalletInfoTransactionOutputsView();
+        return WalletInfoTransactionOutputsView(controller: controller.walletInfoTransactionOutputsController!);
     }
   }
 }

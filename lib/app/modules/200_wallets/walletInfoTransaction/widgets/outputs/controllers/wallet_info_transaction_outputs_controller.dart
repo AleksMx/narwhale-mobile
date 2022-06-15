@@ -1,7 +1,12 @@
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
 
 class WalletInfoTransactionOutputsController extends GetxController {
-  var items = [1, 2, 3, 4];
+  final SWalletModel walletItem;
+  final SCryptoTransactionModel transaction;
+
+  WalletInfoTransactionOutputsController({required this.walletItem, required this.transaction});
 
   @override
   void onInit() {

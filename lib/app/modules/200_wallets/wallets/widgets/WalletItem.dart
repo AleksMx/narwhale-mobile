@@ -87,27 +87,19 @@ class WalletItem extends StatelessWidget {
   Widget getBottomPanel() {
     List<Widget> rows = [];
     rows.add(Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            /*border: Border(
-                top: BorderSide(color: Colors.grey[400]!)
-            )*/
-        ),
-        margin: EdgeInsets.only(top: 0),
-        child: AccountItem(
-          walletKey: walletModel.key
-        )
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 0),
+      child: AccountItem(
+        walletKey: walletModel.key
+      )
     ));
 
     return Column(
-        children: rows
+      children: rows
     );
   }
 
   void tapItem() {
-    /*Get.toNamed(Routes.WALLET_ACCOUNT, arguments: {
-      'walletKey': walletModel.key
-    });*/
     Get.toNamed(Routes.WALLET_INFO, arguments: {
       'walletKey': walletModel.key
     });

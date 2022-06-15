@@ -47,7 +47,11 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
   }
 
   Widget getTabContent() {
-    return ListView.builder(
+    return Center(
+      child: Text('Will be soon')
+    );
+
+    /*return ListView.builder(
       itemCount: _controller.items.length,
       itemBuilder: (context, index) {
         return Container(
@@ -55,6 +59,6 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
           child: WalletInfoAddressesItem()
         );
       }
-    );
+    );*/
   }
 }

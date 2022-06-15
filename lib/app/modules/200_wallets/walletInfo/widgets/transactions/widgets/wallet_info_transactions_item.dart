@@ -1,10 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/TransactionsModels.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import '../../../../../../../utils.dart';
 
 class WalletInfoTransactionsItem extends StatelessWidget {
+  final SCryptoTransactionModel transaction;
+  final String walletKey;
+
+  WalletInfoTransactionsItem({
+    required this.transaction, required this.walletKey
+  });
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -46,26 +56,40 @@ class WalletInfoTransactionsItem extends StatelessWidget {
   }
 
   Widget getTopPanel() {
+    var dt = DateTime.fromMicrosecondsSinceEpoch(transaction.addTime * 1000);
+    String date = DateFormat('yyyy-MM-dd kk:mm').format(dt);
+
+    String info = '';
+    transaction.outputs.forEach((point) {
+      if (info.isNotEmpty) {
+        info += '\n';
+      }
+      info += 'send ' + Utils.formatBTC(point.value);
+    });
+
     TextStyle style = TextStyle(color: Colors.white);
     return Row(
-        children: [
-          Expanded(
-            child: Container(
-                margin: EdgeInsets.only(right: 10),
-                child: Text('Yesterday, 11:00:00', style: style)
-            )
-          ),
-          Container(
-              child: Text('0 BTC', style: style)
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: Text(date, style: style)
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Text(info, textAlign: TextAlign.right, softWrap: true, style: style)
           )
-        ]
+        )
+      ]
     );
   }
 
   Widget getBottomPanel() {
     TextStyle style = TextStyle(color: Colors.white.withOpacity(0.5));
     return Container(
-        child: Text('From exchange abcd ...', style: style)
+        child: Text('Other info', style: style)
     );
   }
 
@@ -77,6 +101,9 @@ class WalletInfoTransactionsItem extends StatelessWidget {
   }
 
   void openItem() {
-    Get.toNamed('/wallet-info-transactions');
+    Get.toNamed(Routes.WALLET_INFO_TRANSACTIONS, arguments: {
+      'walletKey': walletKey,
+      'transaction': transaction
+    });
   }
 }
