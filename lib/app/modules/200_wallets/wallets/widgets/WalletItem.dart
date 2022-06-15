@@ -95,8 +95,7 @@ class WalletItem extends StatelessWidget {
         ),
         margin: EdgeInsets.only(top: 0),
         child: AccountItem(
-          walletKey: walletModel.key,
-          keyIndex: 0
+          walletKey: walletModel.key
         )
     ));
 
@@ -110,8 +109,7 @@ class WalletItem extends StatelessWidget {
       'walletKey': walletModel.key
     });*/
     Get.toNamed(Routes.WALLET_INFO, arguments: {
-      'walletKey': walletModel.key,
-      'keyIndex': 0
+      'walletKey': walletModel.key
     });
   }
 }

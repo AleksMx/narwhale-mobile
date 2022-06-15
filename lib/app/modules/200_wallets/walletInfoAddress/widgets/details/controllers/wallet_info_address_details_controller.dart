@@ -3,10 +3,10 @@ import '../widgets/WalletInfoAddressDetailsList.dart';
 
 class WalletInfoAddressDetailsController extends GetxController {
   final List<WalletInfoAddressDetailsNode> list = [
-    WalletInfoAddressDetailsNode('Net', 'Mainnet'),
-    WalletInfoAddressDetailsNode('From wallet', 'My wallet'),
+    WalletInfoAddressDetailsNode('Net', '?'),
+    WalletInfoAddressDetailsNode('From wallet', '?'),
     WalletInfoAddressDetailsNode('Address index', '0'),
-    WalletInfoAddressDetailsNode('Derivation', "84h’/1’/0"),
+    WalletInfoAddressDetailsNode('Derivation', "?"),
     WalletInfoAddressDetailsNode('Is change address', "No"),
     WalletInfoAddressDetailsNode('Used', "Yes"),
     WalletInfoAddressDetailsNode('UTXO count', "1"),

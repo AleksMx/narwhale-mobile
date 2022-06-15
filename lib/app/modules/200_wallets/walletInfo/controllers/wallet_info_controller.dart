@@ -11,7 +11,6 @@ enum WALLET_INFO_TAB {
 
 class WalletInfoController extends GetxController {
   final String walletKey = Get.arguments['walletKey'];
-  final int keyIndex = Get.arguments['keyIndex'];
   SWalletModel? walletItem;
 
   var currentTab = WALLET_INFO_TAB.DETAILS.obs;

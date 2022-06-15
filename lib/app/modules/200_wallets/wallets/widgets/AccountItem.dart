@@ -7,11 +7,9 @@ import '../../../../../utils.dart';
 
 class AccountItem extends StatelessWidget {
   final String walletKey;
-  final int keyIndex;
 
   AccountItem({
-    required this.walletKey,
-    required this.keyIndex
+    required this.walletKey
   });
 
   @override

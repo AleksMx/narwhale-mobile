@@ -11,7 +11,6 @@ class WalletInfoDetailsNode {
 
 class WalletInfoDetailsController extends GetxController {
   late SWalletModel walletItem;
-  late int keyIndex;
 
   late List<WalletInfoDetailsNode> list;
 
@@ -21,17 +20,11 @@ class WalletInfoDetailsController extends GetxController {
 
     WalletInfoController walletInfoController = Get.find<WalletInfoController>();
     walletItem = walletInfoController.walletItem!;
-    keyIndex = walletInfoController.keyIndex;
-
-    SWalletKey walletKeyDetails = walletItem.descriptor.keys[keyIndex];
-    print(walletKeyDetails.raw);
 
     list = [];
     list.add(WalletInfoDetailsNode('Net', walletItem.descriptor.net.toShortString().toLowerCase()));
     list.add(WalletInfoDetailsNode('Type', walletItem.descriptor.policy));
     list.add(WalletInfoDetailsNode('Format', walletItem.descriptor.type));
-    list.add(WalletInfoDetailsNode('Derivation', walletKeyDetails.getDerivationPath()));
-    list.add(WalletInfoDetailsNode('Fingerprint', walletKeyDetails.getFingerprint()));
     list.add(WalletInfoDetailsNode('Balance', '0.0 BTC'));
     list.add(WalletInfoDetailsNode('Balance, fiat', '0 USD'));
   }
