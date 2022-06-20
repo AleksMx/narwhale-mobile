@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../utils.dart';
 
 enum TOP_SIDE_TITLE_TYPE {
+  NONE,
   WALLET,
   ADDRESS,
   TRANSACTION
@@ -58,7 +59,7 @@ class TopSide extends StatelessWidget {
                   )
               ),
               Container(
-                  padding: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(right: 10, left: 50),
                   child: getMenuButton()
               )
             ]
@@ -67,8 +68,11 @@ class TopSide extends StatelessWidget {
   }
 
   Widget getShortIcon() {
-    String icon;
+    if (titleType == TOP_SIDE_TITLE_TYPE.NONE) {
+      return Container();
+    }
 
+    String icon;
     switch(titleType) {
       case TOP_SIDE_TITLE_TYPE.WALLET:
         icon = 'assets/icons/bitcoin.svg';
@@ -78,6 +82,9 @@ class TopSide extends StatelessWidget {
         break;
       case TOP_SIDE_TITLE_TYPE.TRANSACTION:
         icon = 'assets/icons/globe_1.svg';
+        break;
+      case TOP_SIDE_TITLE_TYPE.NONE:
+        icon = 'assets/icons/bitcoin.svg';
         break;
     }
 

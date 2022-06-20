@@ -192,6 +192,12 @@ class CCryptoProviderRust extends CCryptoProvider {
   }
 
   @override
+  String getPublicKey(SMnemonicRootKey mnemonicRootKey, String path, WalletNetwork net) {
+    var xpub = SpecterRust.derive_xpub(mnemonicRootKey.rootPrivateKey, path, net.toShortString().toLowerCase());
+    return xpub;
+  }
+
+  @override
   SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net) {
     var obj = SpecterRust.parse_descriptor(descriptor, mnemonicRootKey.rootPrivateKey, net.toShortString().toLowerCase());
     List<SWalletKey> _keys = [];

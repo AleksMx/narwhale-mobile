@@ -55,4 +55,26 @@ class CControlWalletsService {
   SWalletModel getWalletByKey(String key) {
     return CServices.crypto.privateCryptoContainer.getWalletByKey(key);
   }
+
+  String getPublicKey(PublicKey publicKey) {
+    SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
+    WalletNetwork net = CServices.crypto.getCurrentNetwork();
+
+    String path = "m/84'/0'/0'";
+    /*TODO: if (net != WalletNetwork.BITCOIN) {
+      path = "m/84'/1'/0'";
+    }*/
+
+    switch(publicKey) {
+      case PublicKey.SINGLE_SIG:
+        path = 'm/84h/1h/0h';
+        break;
+      case PublicKey.MULTI_SIG:
+        path = 'm/48h/1h/0h/2h';
+        break;
+    }
+
+    String pubKey = CServices.crypto.cryptoProvider.getPublicKey(mnemonicRootKey, path, net);
+    return pubKey;
+  }
 }

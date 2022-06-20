@@ -32,4 +32,8 @@ class SlidingUpPanelController extends GetxController {
     this.maxHeight.value = maxHeight;
     slidingUpPanelController.open();
   }
+
+  void close() {
+    slidingUpPanelController.close();
+  }
 }

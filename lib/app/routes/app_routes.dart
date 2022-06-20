@@ -21,6 +21,7 @@ abstract class Routes {
   static const CREATE_NEW_WALLET = _Paths.CREATE_NEW_WALLET;
   static const IMPORT_EXISTING_WALLET = _Paths.IMPORT_EXISTING_WALLET;
   static const SCAN_QR_CODE = _Paths.SCAN_QR_CODE;
+  static const OPTIONS_VIEW_PUBLIC_KEY = _Paths.OPTIONS_VIEW_PUBLIC_KEY;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const CREATE_NEW_WALLET = '/create-new-wallet';
   static const IMPORT_EXISTING_WALLET = '/import-existing-wallet';
   static const SCAN_QR_CODE = '/scan-qr-code';
+  static const OPTIONS_VIEW_PUBLIC_KEY = '/options-view-public-key';
 }

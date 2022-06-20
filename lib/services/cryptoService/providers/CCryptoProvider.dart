@@ -140,6 +140,10 @@ extension ParseToString on WalletNetwork {
   }
 }
 
+enum PublicKey {
+  SINGLE_SIG, MULTI_SIG
+}
+
 class SWalletDescriptor {
   WalletNetwork net;
   String recv;
@@ -256,6 +260,7 @@ abstract class CCryptoProvider {
   SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass);
   SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey, WalletNetwork net);
   SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net);
+  String getPublicKey(SMnemonicRootKey mnemonicRootKey, String path, WalletNetwork net);
 
   //Transactions API
   SCryptoTransactionModel parseTransaction(SMnemonicRootKey mnemonicRootKey, QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net);

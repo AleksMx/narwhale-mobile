@@ -51,6 +51,10 @@ class QRCodeGeneratorState extends State<QRCodeGenerator> {
   }
 
   void splitByChunks() {
+    if (widget.maxChunkSize < 1) {
+      chunks = [widget.data];
+      return;
+    }
     chunks = Utils.splitStringByChunk(widget.data, widget.maxChunkSize);
   }
 

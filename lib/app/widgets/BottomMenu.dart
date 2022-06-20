@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 import '../../utils.dart';
@@ -85,9 +87,11 @@ class BottomMenu extends StatelessWidget {
       menuItems: [
         BottomSlideMenuItem(
           icon: './assets/icons/qr_code_scanner_2.svg',
-          title: 'View Public Key',
+          title: 'View Public Keys',
           onTap: () {
-
+            Get.toNamed(Routes.OPTIONS_VIEW_PUBLIC_KEY, arguments: {
+            });
+            slidingUpPanelController.close();
           }
         )
       ]

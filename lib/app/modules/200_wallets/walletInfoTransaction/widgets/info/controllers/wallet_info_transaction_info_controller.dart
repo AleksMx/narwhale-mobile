@@ -19,7 +19,7 @@ class WalletInfoTransactionInfoController extends GetxController {
 
     list = [
       WalletInfoAddressDetailsNode('Net', '?'),
-      WalletInfoAddressDetailsNode('From wallet', walletItem!.name),
+      WalletInfoAddressDetailsNode('From wallet', walletItem.name),
       WalletInfoAddressDetailsNode('Size', '?'),
       WalletInfoAddressDetailsNode('Mined at block', '?'),
       WalletInfoAddressDetailsNode('Block date', '?'),
