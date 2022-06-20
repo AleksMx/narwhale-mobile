@@ -7,6 +7,7 @@ class SlidingUpPanelController extends GetxController {
 
   Rx<bool> slidingUpPanelIsOpen = false.obs;
 
+  final Rx<double> maxHeight = 500.0.obs;
   final Rx<Widget> child = Container().obs;
 
   @override
@@ -24,10 +25,11 @@ class SlidingUpPanelController extends GetxController {
     super.onClose();
   }
 
-  void open(Widget child) {
+  void open(Widget child, {double maxHeight = 500}) {
     this.child.value = Container(
       child: child
     );
+    this.maxHeight.value = maxHeight;
     slidingUpPanelController.open();
   }
 }

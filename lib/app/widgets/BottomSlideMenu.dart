@@ -6,10 +6,12 @@ import '../../utils.dart';
 class BottomSlideMenuItem {
   final String icon;
   final String title;
+  final Function? onTap;
 
   BottomSlideMenuItem({
     required this.icon,
-    required this.title
+    required this.title,
+    this.onTap
   });
 }
 
@@ -65,7 +67,9 @@ class BottomSlideMenu extends StatelessWidget {
   Widget getMenuItem(BottomSlideMenuItem menuItem) {
     return InkWell(
       onTap: () {
-        print('open menu');
+        if (menuItem.onTap != null) {
+          menuItem.onTap!();
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5),

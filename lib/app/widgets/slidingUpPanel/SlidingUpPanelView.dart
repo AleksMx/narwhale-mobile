@@ -10,11 +10,13 @@ class SlidingUpPanelView extends GetView<SlidingUpPanelController> {
   final Widget body;
   final SlidingUpPanelController _controller;
 
-  SlidingUpPanelView({required SlidingUpPanelController controller, required this.body}): _controller = controller;
+  SlidingUpPanelView({
+    required SlidingUpPanelController controller,required this.body
+  }): _controller = controller;
 
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanel(
+    return Obx(() => SlidingUpPanel(
       onPanelSlide: (pos) {
         if (pos > 0) {
           _controller.slidingUpPanelIsOpen.value = true;
@@ -30,10 +32,11 @@ class SlidingUpPanelView extends GetView<SlidingUpPanelController> {
       body: getBody(),
       panel: getSlideMenu(),
       minHeight: 0,
+      maxHeight: _controller.maxHeight.value,
       backdropEnabled: true,
       color: Colors.transparent,
       controller: _controller.slidingUpPanelController,
-    );
+    ));
   }
 
   Widget getBody() {

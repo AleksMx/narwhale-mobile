@@ -71,7 +71,7 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.MORE),
               icon: 'assets/icons/coolicon.svg',
               onSelect: () {
-                slidingUpPanelController.open(getSlideMenu());
+                slidingUpPanelController.open(getSlideMenu(), maxHeight: 300);
               }
             )
           )
@@ -82,12 +82,15 @@ class BottomMenu extends StatelessWidget {
 
   Widget getSlideMenu() {
     return BottomSlideMenu(
-        menuItems: [
-          BottomSlideMenuItem(
-              icon: './assets/icons/menu_delete.svg',
-              title: 'Delete data'
-          )
-        ]
+      menuItems: [
+        BottomSlideMenuItem(
+          icon: './assets/icons/qr_code_scanner_2.svg',
+          title: 'View Public Key',
+          onTap: () {
+
+          }
+        )
+      ]
     );
   }
 }

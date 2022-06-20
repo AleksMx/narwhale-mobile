@@ -17,10 +17,10 @@ class WalletsView extends GetView<WalletsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SlidingUpPanelView(
-            controller: _slidingUpPanelController,
-            body: getBody()
-        )
+      body: SlidingUpPanelView(
+        controller: _slidingUpPanelController,
+        body: getBody()
+      )
     );
   }
 
