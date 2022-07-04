@@ -8,8 +8,9 @@ import '../../../utils.dart';
 class QRCodeGenerator extends StatefulWidget {
   final String data;
   final int maxChunkSize;
+  final bool whiteColor;
 
-  QRCodeGenerator({required this.data, this.maxChunkSize = 4});
+  QRCodeGenerator({required this.data, this.maxChunkSize = 4, this.whiteColor = true});
 
   @override
   State<StatefulWidget> createState() {
@@ -64,11 +65,11 @@ class QRCodeGeneratorState extends State<QRCodeGenerator> {
     return Column(
       children: [
         QrImage(
-            data: chunkData,
-            foregroundColor: Colors.white,
-            version: QrVersions.auto
+          data: chunkData,
+          foregroundColor: widget.whiteColor?Colors.white:Colors.grey[800],
+          version: QrVersions.auto
         ),
-        Text((currentChunkIdx + 1).toString() + '/' + chunks.length.toString(), style: TextStyle(color: Colors.grey[100]))
+        //Text((currentChunkIdx + 1).toString() + '/' + chunks.length.toString(), style: TextStyle(color: Colors.grey[100]))
       ]
     );
   }

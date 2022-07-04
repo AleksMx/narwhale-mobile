@@ -264,4 +264,5 @@ abstract class CCryptoProvider {
 
   //Transactions API
   SCryptoTransactionModel parseTransaction(SMnemonicRootKey mnemonicRootKey, QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net);
+  dynamic signTransaction(SMnemonicRootKey mnemonicRootKey, SCryptoTransactionModel transaction);
 }

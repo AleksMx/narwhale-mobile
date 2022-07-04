@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
 
 import '../controllers/wallet_info_transactions_controller.dart';
 
@@ -8,5 +9,7 @@ class WalletInfoTransactionBinding extends Bindings {
     Get.lazyPut<WalletInfoTransactionController>(
       () => WalletInfoTransactionController(),
     );
+
+    Get.create<SlidingUpPanelController>(() => SlidingUpPanelController());
   }
 }

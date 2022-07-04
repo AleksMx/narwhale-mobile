@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/models/TransactionsModels.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/widgets/details/widgets/WalletInfoAddressDetailsList.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 class WalletInfoTransactionInfoController extends GetxController {
   final SWalletModel walletItem;
@@ -16,6 +18,7 @@ class WalletInfoTransactionInfoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
 
     list = [
       WalletInfoAddressDetailsNode('Net', '?'),
@@ -37,4 +40,9 @@ class WalletInfoTransactionInfoController extends GetxController {
 
   @override
   void onClose() {}
+
+  String signTransaction(BuildContext context) {
+    var res = CServices.crypto.controlTransactionsService.signTransaction(transaction);
+    return res.toString();
+  }
 }

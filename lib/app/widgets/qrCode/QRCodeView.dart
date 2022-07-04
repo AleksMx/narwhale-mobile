@@ -143,10 +143,14 @@ class QRCodeView extends StatelessWidget {
   Widget getTransactionPointsArea(List<SCryptoTransactionPoint> points) {
     List<Widget> rows = [];
     points.forEach((point) {
-      SWalletModel walletItem = CServices.crypto.controlWalletsService.getWalletByKey(point.walletKey);
+      String walletName = '';
+      if (point.walletKey.isNotEmpty) {
+        SWalletModel walletItem = CServices.crypto.controlWalletsService.getWalletByKey(point.walletKey);
+        walletName = walletItem.name;
+      }
 
       rows.add(Container(
-        child: Text(walletItem.name+ ' -> ' + point.value.toString())
+        child: Text(walletName + ' -> ' + point.value.toString())
       ));
     });
     return Column(

@@ -37,6 +37,7 @@ class SCryptoTransactionPoint {
 }
 
 class SCryptoTransactionModel {
+  final String psbt;
   final double fee;
   final List<SCryptoTransactionPoint> inputs;
   final List<SCryptoTransactionPoint> outputs;
@@ -45,6 +46,7 @@ class SCryptoTransactionModel {
   late String key;
 
   SCryptoTransactionModel({
+    required this.psbt,
     required this.fee,
     required this.inputs,
     required this.outputs
@@ -54,6 +56,7 @@ class SCryptoTransactionModel {
   }
 
   static SCryptoTransactionModel fromJSON(Map<String, dynamic> data) {
+    var psbt = data['psbt'];
     var fee = data['fee'].toDouble();
     List<dynamic> inputs = data['inputs'];
     List<dynamic> outputs = data['outputs'];
@@ -67,6 +70,7 @@ class SCryptoTransactionModel {
     }).toList();
 
     return SCryptoTransactionModel(
+      psbt: psbt,
       fee: fee,
       inputs: inputsPoints,
       outputs: outputsPoints
@@ -101,6 +105,7 @@ class SCryptoTransactionModel {
     });
 
     return {
+      'psbt': psbt,
       'key': key,
       'addTime': addTime,
       'fee': fee,

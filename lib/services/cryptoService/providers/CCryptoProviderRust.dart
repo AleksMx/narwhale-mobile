@@ -215,11 +215,6 @@ class CCryptoProviderRust extends CCryptoProvider {
     );
   }
 
-  String _parseDescription(SMnemonicRootKey mnemonicRootKey, String desc, WalletNetwork net) {
-    var x = getParsedDescriptor(mnemonicRootKey, desc, net);
-    return '';
-  }
-
   @override
   SCryptoTransactionModel parseTransaction(SMnemonicRootKey mnemonicRootKey, QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net) {
     List<dynamic> walletsJson = [];
@@ -235,10 +230,11 @@ class CCryptoProviderRust extends CCryptoProvider {
     List<dynamic> inputs = obj['inputs'];
     List<dynamic> outputs = obj['outputs'];
 
-    List<SCryptoTransactionPoint> inputsData = _parseTransactionPoints(searchWallets, inputs );
-    List<SCryptoTransactionPoint> outputsData = _parseTransactionPoints(searchWallets, outputs);
+    List<SCryptoTransactionPoint> inputsData = _parseTransactionPoints(searchWallets, inputs, needWallet: true);
+    List<SCryptoTransactionPoint> outputsData = _parseTransactionPoints(searchWallets, outputs, needWallet: false);
 
     SCryptoTransactionModel tx = SCryptoTransactionModel(
+      psbt: transaction.raw,
       fee: fee.toDouble(),
       inputs: inputsData,
       outputs: outputsData
@@ -250,29 +246,40 @@ class CCryptoProviderRust extends CCryptoProvider {
     return tx;
   }
 
-  List<SCryptoTransactionPoint> _parseTransactionPoints(List<SWalletModel> searchWallets, List<dynamic> points) {
+  @override
+  dynamic signTransaction(SMnemonicRootKey mnemonicRootKey, SCryptoTransactionModel transaction) {
+    var obj = SpecterRust.sign_transaction(transaction.psbt, mnemonicRootKey.rootPrivateKey);
+    return obj;
+  }
+
+  List<SCryptoTransactionPoint> _parseTransactionPoints(List<SWalletModel> searchWallets, List<dynamic> points, {bool needWallet = false}) {
     List<SCryptoTransactionPoint> pointsData = [];
     points.forEach((point) {
-      pointsData.add(_parseTransactionPointItem(searchWallets, point));
+      pointsData.add(_parseTransactionPointItem(searchWallets, point, needWallet: needWallet));
     });
     return pointsData;
   }
 
-  SCryptoTransactionPoint _parseTransactionPointItem(List<SWalletModel> searchWallets, var obj) {
+  SCryptoTransactionPoint _parseTransactionPointItem(List<SWalletModel> searchWallets, var obj, {bool needWallet = false}) {
     String address = obj['address'];
     num value = obj['value'];
     List<dynamic> wallets = obj['wallets'];
 
-    if (wallets.isEmpty) {
+    if (wallets.isEmpty && needWallet) {
       throw 'Can not find wallet';
     }
-    num walletIndexNum = wallets.first;
-    SWalletModel walletItem = searchWallets[walletIndexNum.toInt()];
+
+    String walletKey = '';
+    if (wallets.isNotEmpty) {
+      num walletIndexNum = wallets.first;
+      SWalletModel walletItem = searchWallets[walletIndexNum.toInt()];
+      walletKey = walletItem.key;
+    }
 
     SCryptoTransactionPoint point = SCryptoTransactionPoint(
       address: address,
       value: value.toDouble(),
-      walletKey: walletItem.key
+      walletKey: walletKey
     );
     return point;
   }

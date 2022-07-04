@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoTransaction/widgets/info/controllers/wallet_info_transaction_info_controller.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 import 'package:specter_mobile/app/widgets/TopSide.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelView.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
 
 import '../widgets/info/views/wallet_info_transaction_info_view.dart';
@@ -13,27 +15,36 @@ import '../widgets/inputs/views/wallet_info_transaction_inputs_view.dart';
 import '../widgets/outputs/views/wallet_info_transaction_outputs_view.dart';
 
 class WalletInfoTransactionView extends GetView<WalletInfoTransactionController> {
+  final SlidingUpPanelController _slidingUpPanelController = Get.find<SlidingUpPanelController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TopSide(
-                    title: 'Transaction details',
-                    titleType: TOP_SIDE_TITLE_TYPE.TRANSACTION,
-                    menuType: TOP_SIDE_MENU_TYPE.NONE,
-                    openMenu: () {
-                      print('openMenu');
-                    }
-                  ),
-                  Expanded(
-                      child: getContent()
-                  )
-                ]
-            )
+        body: SlidingUpPanelView(
+            controller: _slidingUpPanelController,
+            body: getBody()
+        )
+    );
+  }
+
+  Widget getBody() {
+    return SafeArea(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TopSide(
+                  title: 'Transaction details',
+                  titleType: TOP_SIDE_TITLE_TYPE.TRANSACTION,
+                  menuType: TOP_SIDE_MENU_TYPE.NONE,
+                  openMenu: () {
+                    print('openMenu');
+                  }
+              ),
+              Expanded(
+                  child: getContent()
+              )
+            ]
         )
     );
   }
@@ -101,7 +112,7 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
   Widget getTabContent() {
     switch(controller.currentTab.value) {
       case WALLET_INFO_TRANSACTIONS_TAB.INFO:
-        return WalletInfoTransactionInfoView(controller: controller.walletInfoTransactionInfoController!);
+        return WalletInfoTransactionInfoView(controller: controller.walletInfoTransactionInfoController!, slidingUpPanelController: _slidingUpPanelController);
       case WALLET_INFO_TRANSACTIONS_TAB.INPUTS:
         return WalletInfoTransactionInputsView(controller: controller.walletInfoTransactionInputsController!);
       case WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS:

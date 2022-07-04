@@ -6,15 +6,19 @@ import 'package:get/get.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/widgets/details/widgets/WalletInfoAddressDetailsList.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import '../../SignTransactionView.dart';
 import '../controllers/wallet_info_transaction_info_controller.dart';
 
 class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoController> {
+  final SlidingUpPanelController _slidingUpPanelController;
   final WalletInfoTransactionInfoController _controller;
 
   WalletInfoTransactionInfoView({
-    required WalletInfoTransactionInfoController controller
-  }): _controller = controller;
+    required WalletInfoTransactionInfoController controller,
+    required SlidingUpPanelController slidingUpPanelController
+  }): _controller = controller, _slidingUpPanelController = slidingUpPanelController;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +75,10 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
         Container(
           margin: EdgeInsets.only(top: 20),
           child: getCopyAddress(context)
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 20),
+          child: getSignTransaction(context)
         )
       ]
     );
@@ -88,6 +96,22 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
       ],
     ), onTap: () {
       copyAddress(context);
+    });
+  }
+
+  Widget getSignTransaction(BuildContext context) {
+    return LightButton(child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          child: SvgPicture.asset('assets/icons/content_copy.svg', color: Colors.white),
+        ),
+        Text('Sign', style: TextStyle(color: Colors.white))
+      ],
+    ), onTap: () {
+      var sign = _controller.signTransaction(context);
+      _slidingUpPanelController.open(SignTransactionView(sign: sign));
     });
   }
 

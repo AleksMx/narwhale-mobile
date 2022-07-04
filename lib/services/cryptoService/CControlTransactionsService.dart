@@ -17,6 +17,11 @@ class CControlTransactionsService {
     return CServices.crypto.cryptoProvider.parseTransaction(mnemonicRootKey, transaction, wallets, CServices.crypto.getCurrentNetwork());
   }
 
+  dynamic signTransaction(SCryptoTransactionModel transaction) {
+    SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
+    return CServices.crypto.cryptoProvider.signTransaction(mnemonicRootKey, transaction);
+  }
+
   List<SCryptoTransactionModel>? transactions;
 
   DiskStorageJSON? storageJSON;
